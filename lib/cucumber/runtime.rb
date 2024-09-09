@@ -261,8 +261,9 @@ module Cucumber
 
         unless configuration.dry_run?
           filters << Filters::BroadcastTestRunStartedEvent.new(@configuration)
-          filters << Filters::Quit.new
           filters << Filters::Retry.new(@configuration)
+          # Quit comes after Retry so we don't retry tests after getting the quit signal
+          filters << Filters::Quit.new
           # need to do this last so it becomes the first test step
           filters << Filters::PrepareWorld.new(self)
         end
